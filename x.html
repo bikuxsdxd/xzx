@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="GenZ Rising Nepal ~digital protesters exposing corruption, scams, and political hypocrisy in Nepal.">
+  <title>GenZRisingNepal ~ CTRL NEPAL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-dark: #000;
+      --overlay: rgba(0,0,0,0.65);
+      --accent: #ff3344;
+      --cyan: #00f0ff;
+      --lime: #7cff4d;
+      --muted: #a0a8a8;
+      --mono: "Orbitron", "Courier New", Courier, monospace;
+    }
+    html, body {
+      margin:0; padding:0; height:100%;
+      font-family: var(--mono);
+      color: #fff;
+      background: var(--bg-dark);
+      overflow-x: hidden;
+    }
+    #bg-video {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: -3;
+      filter: brightness(0.45) contrast(1.05);
+    }
+    .overlay {
+      position: fixed;
+      top:0; left:0;
+      width: 100%; height: 100%;
+      background: var(--overlay);
+      z-index: -2;
+    }
+    .wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 1.5rem;
+      box-sizing: border-box;
+    }
+    .card {
+      width: 100%;
+      max-width: 1200px;
+      padding: 24px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.28), rgba(4,4,8,0.35));
+      box-shadow: 0 10px 50px rgba(0,0,0,0.7), 0 0 36px rgba(0,200,150,0.02) inset;
+      border: 1px solid rgba(255,255,255,0.03);
+      display: grid;
+      grid-template-columns: 1fr minmax(260px, 360px);
+      gap: 20px;
+    }
+    .hero {
+      text-align: left;
+      padding: 6px 8px;
+    }
+    .eyebrow {
+      font-size: 0.86rem;
+      color: var(--muted);
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      margin: 0 0 12px 0;
+      line-height: 1.2;
+      color: var(--accent);
+      text-shadow: 0 0 18px rgba(255,51,68,0.14), 0 0 40px rgba(0,240,255,0.02);
+      display: inline-block;
+      position: relative;
+    }
+    h1::after, h1::before {
+      content: attr(data-text);
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      opacity: 0.14;
+      pointer-events: none;
+    }
+    h1::before {
+      color: var(--cyan);
+      transform: translate(3px, -2px);
+    }
+    h1::after {
+      color: var(--lime);
+      transform: translate(-3px, 2px);
+    }
+    .statement {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px dashed var(--lime);
+      padding: 20px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: clamp(0.9rem, 1.5vw, 1rem);
+      color: var(--lime);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      text-align: left;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .box {
+      flex: 1 1 280px;
+      padding: 16px;
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 6px;
+      box-shadow: 0 0 5px var(--lime);
+      overflow-wrap: anywhere;
+    }
+    .box.nepali { font-weight: bold; }
+    .box.english { font-style: italic; }
+    .side {
+      padding: 6px 8px;
+    }
+    .side h3 {
+      margin: 0 0 10px 0;
+      font-size: 1.05rem;
+      color: var(--cyan);
+    }
+    .donation {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: rgba(0,0,0,0.18);
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.9rem;
+      font-family: monospace;
+    }
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      border: 1px solid rgba(255,255,255,0.02);
+      flex-wrap: wrap;
+    }
+    .coin {
+      font-weight: 700;
+      min-width: 62px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .addr {
+      font-family: monospace;
+      font-size: 0.86rem;
+      flex: 1;
+      overflow-wrap: anywhere;
+      color: #fff;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      transition: 0.2s;
+      user-select: all;
+    }
+    .addr:hover { color: var(--cyan); }
+    .btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 8px 10px;
+      border-radius: 8px;
+      color: var(--cyan);
+      cursor: pointer;
+      font-family: var(--mono);
+      user-select: none;
+    }
+    .btn:focus {
+      outline: none;
+      border-color: var(--lime);
+    }
+    .hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 6px;
+      user-select: none;
+    }
+    .copied {
+      color: #a6ffd9;
+      margin-left: 0;
+      font-weight: 600;
+      font-size: 0.87rem;
+      user-select: none;
+    }
+    footer {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .cta {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,51,68,0.12);
+      background: linear-gradient(90deg, rgba(255,51,68,0.03), rgba(0,240,255,0.02));
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* 🔹 Responsive Fixes */
+    @media (max-width: 980px){
+      .card { grid-template-columns: 1fr; }
+      .side { order:2; }
+      .statement { flex-direction: column; }
+    }
+    @media (max-width: 720px){
+      .card { padding: 16px; }
+      .statement { font-size: 0.92rem; }
+      .box { padding: 12px; }
+    }
+    @media (max-width: 520px){
+      h1 { font-size: 1.6rem; }
+      .statement { font-size: 0.9rem; }
+      .donation { font-size: 0.8rem; }
+      .btn { padding: 6px 8px; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <video id="bg-video" autoplay muted loop playsinline>
+    <source src="https://g.top4top.io/m_3538vjq7t1.mp4" type="video/mp4">
+  </video>
+  <div class="overlay"></div>
+
+  <div class="wrap">
+    <div class="card">
+
+      <div class="hero">
+        <div class="eyebrow">xXx ~GenZRisingNepal · CTRL NEPAL ~xXx</div>
+        <h1 data-text="GenZRisingNepal • https://t.me/ctrl_nepal">GenZRisingNepal • https://t.me/ctrl_nepal</h1>
+
+        <div class="statement">
+          <div class="box nepali" lang="ne">
+            सबै झोलेहरूसँग कडा चेतावनी!<br>
+            हामी कुनै पनि राजनीतिक दलका अन्ध समर्थक होइनौं, न त कसैको तलुवा चाट्ने काम गर्छौं।<br>
+            हामी सत्य बोल्छौं, तथ्य देखाउँछौं — चाहे त्यो तपाईंको नेताले मन पराओस् या नपराओस्।<br>
+            पछिल्लो पोष्टमा देखिएको झोलेहरूको बग्रेल्ती उपस्थितिलाई हामीले ध्यानपूर्वक हेरेका छौं।<br>
+            अबदेखि तपाईंहरूको हरेक कमेन्ट, हरेक आइडी, र हरेक गतिविधि ट्र्याक गरिन्छ।<br>
+            आफ्नो ठाउँ नछिचोस् — नत्र नाम, आइडी, र प्रमाणसहित सबै खुलासा गरिनेछ।<br>
+            सामाजिक सञ्जालको आडमा गाली गलौज, धम्की, वा झुटो प्रचार गर्ने प्रयास नगर्नू।<br>
+            यस पेजले न त कसैसँग डराउँछ, न त झुन्छ।<br>
+            सत्य पक्षमा उभिनु हाम्रो धर्म हो — र झोलेपनको जवाफ हामी तथ्यसहित दिन सक्छौं।<br>
+            अबदेखि कुनै पनि झोले गतिविधि सह्य गरिँदैन। तयार रहनू – एक्सपोज सुरु हुन्छ।<br>
+            – CTRL NEPAL
+          </div>
+          <div class="box english" lang="en">
+            A strong warning to all blind supporters!<br>
+            We do not blindly support any political party, nor do we lick anyone's boots.<br>
+            We speak the truth, show the facts — whether your leader likes it or not.<br>
+            We have carefully observed the massive presence of blind supporters shown in the last post.<br>
+            From now on, every comment, every ID, and every activity of yours will be tracked.<br>
+            Do not trespass your limits — otherwise, all names, IDs, and evidence will be disclosed.<br>
+            Do not attempt to insult, threaten, or spread false propaganda under the cover of social media.<br>
+            This page neither fears nor bends to anyone.<br>
+            Standing on the side of truth is our duty — and we can respond to blind acts with facts.<br>
+            No blind activity will be tolerated from now on. Be prepared — the exposure begins.<br>
+            – CTRL NEPAL
+          </div>
+        </div>
+
+        <footer>
+          <div class="hint">Keep it loud. Keep it readable.</div>
+        </footer>
+      </div>
+
+      <aside class="side" aria-label="Donate & links">
+        <h3>💸 Fuel the mission ~help us <br>take down corruption</h3>
+        <div class="donation">
+
+          <div class="chip">
+            <div class="coin">USDT</div>
+            <div tabindex="0" role="button" class="addr" data-raw="0x05144b8330100D15BDE29Db35D841E73bA556073">
+              0x05144b8330100D15BDE29Db35D841E73bA556073
+            </div>
+            <button class="btn" data-address="0x05144b8330100D15BDE29Db35D841E73bA556073" onclick="copyFromBtn(this)">Copy</button>
+          </div>
+
+          <div class="chip">
+            <div class="coin">BTC</div>
+            <div tabindex="0" role="button" class="addr" data-raw="bc1q3zgq5xd3at070cr0g28nektrfn0s5830ryuvcv">
+              bc1q3zgq5xd3at070cr0g28nektrfn0s5830ryuvcv
+            </div>
+            <button class="btn" data-address="bc1q3zgq5xd3at070cr0g28nektrfn0s5830ryuvcv" onclick="copyFromBtn(this)">Copy</button>
+          </div>
+
+          <div class="chip">
+            <div class="coin">ETH</div>
+            <div tabindex="0" role="button" class="addr" data-raw="0x05144b8330100D15BDE29Db35D841E73bA556073">
+              0x05144b8330100D15BDE29Db35D841E73bA556073
+            </div>
+            <button class="btn" data-address="0x05144b8330100D15BDE29Db35D841E73bA556073" onclick="copyFromBtn(this)">Copy</button>
+          </div>
+
+          <div class="hint">Tap/click an address to copy.</div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <a class="btn" href="#" onclick="navigator.clipboard && navigator.clipboard.writeText('t.me/ctrl_nepal') && alert('Contact copied')">Copy Contact</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    function writeToClipboard(text){
+      if(!text) return Promise.reject('no text');
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        return navigator.clipboard.writeText(text);
+      } else {
+        return new Promise((resolve, reject) => {
+          try {
+            const ta=document.createElement('textarea');
+            ta.value=text;
+            ta.style.position='fixed';ta.style.left='-9999px';
+            document.body.appendChild(ta);ta.select();
+            document.execCommand('copy');document.body.removeChild(ta);resolve();
+          } catch(e){reject(e);}
+        });
+      }
+    }
+    function hint(container,msg){
+      const prev=container.querySelector('.copied');if(prev)prev.remove();
+      const span=document.createElement('span');span.className='copied';span.textContent=msg;
+      container.appendChild(span);setTimeout(()=>span.remove(),1500);
+    }
+    document.querySelectorAll('.addr').forEach(el=>{
+      el.addEventListener('click',()=>{
+        const raw=el.getAttribute('data-raw')||el.textContent.trim();
+        if(!raw){hint(el.closest('.chip')||el.parentNode,'Set address first');return;}
+        writeToClipboard(raw).then(()=>hint(el.closest('.chip')||el.parentNode,'Copied')).catch(()=>hint(el.closest('.chip')||el.parentNode,'Copy failed'));
+      });
+      el.addEventListener('keydown',(e)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
+    });
+    function copyFromBtn(btn){
+      const addr=btn.getAttribute('data-address')||'';
+      const container=btn.closest('.chip')||btn.parentNode;
+      if(!addr){hint(container,'Replace placeholders');return;}
+      writeToClipboard(addr).then(()=>hint(container,'Copied')).catch(()=>hint(container,'Copy failed'));
+    }
+  </script>
+
+</body>
+</html>
